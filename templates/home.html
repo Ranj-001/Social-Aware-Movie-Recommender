@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Recommendation System</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Auto Complete -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
+  <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+    <script type="text/javascript">
+        // Set films variable before loading autocomplete.js
+        var films = {{ suggestions|tojson|safe }};
+    </script>
+
+</head>
+
+<body id="content" style="font-family: 'Noto Sans JP', sans-serif;">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="{{ url_for('home') }}">SocialMovieGNN</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('register') }}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="ml-container" style="display: block;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if current_user.is_authenticated %}
+            <center><h1 style="margin-top: 20px;">Welcome, {{ current_user.username }}!</h1></center>
+            <center><h3 style="margin-top: 10px;">Your Personalized Recommendations</h3></center>
+            <div id="personalized" class="movie-content modern-recs" style="padding: 10px 20px;">
+                <!-- Filled by JS from /api/home_recs -->
+            </div>
+            <script>
+              document.addEventListener('DOMContentLoaded', function(){
+                fetch('/api/home_recs')
+                  .then(r=>r.json())
+                  .then(data=>{
+                    console.log('home_recs:', data);
+                    const cont = document.getElementById('personalized');
+                    cont.innerHTML = '';
+                    if(!data || !data.recommendations || data.recommendations.length===0){
+                      cont.innerHTML = '<p style="color:#bbb">No personalized data yet. Rate some movies or add friends to get started.</p>';
+                      return;
+                    }
+                    data.recommendations.forEach(item=>{
+                      const card = document.createElement('div');
+                      card.className = 'card modern-card shadow';
+                      card.style.width = '16rem';
+                      card.setAttribute('title', item.title || item.name || '');
+                      card.onclick = function(){ if(typeof recommendcard==='function') recommendcard(this); };
+
+                      // Ensure poster is a valid URL string. Accept http(s) or protocol-relative, otherwise fallback to https placeholder
+                      let poster = null;
+                      if(item && typeof item.poster === 'string'){
+                        const p = item.poster.trim();
+                        if(p.startsWith('http://') || p.startsWith('https://') || p.startsWith('//')){
+                          poster = p.startsWith('//') ? ('https:' + p) : p;
+                        } else if (p.startsWith('/')) {
+                          // allow app-relative paths such as /static/image.jpg
+                          poster = p;
+                        }
+                      } else if(item && typeof item.poster_path === 'string' && item.poster_path.length>0){
+                        poster = `https://image.tmdb.org/t/p/w500${item.poster_path}`;
+                      }
+                      if(!poster){
+                        // fallback placeholder with title
+                        poster = `https://via.placeholder.com/240x360?text=${encodeURIComponent((item.title||item.name||'No Image'))}`;
+                      }
+
+                      // Start with a guaranteed placeholder so the card always shows an image
+                      const placeholder = `https://via.placeholder.com/240x360?text=${encodeURIComponent((item.title||item.name||'No+Image'))}`;
+                      card.innerHTML = `
+                        <div class="imghvr">
+                          <img class="card-img-top" height="360" width="240" alt="${(item.title||item.name||'poster')} - poster" src="${placeholder}" />
+                          <figcaption class="fig">
+                            <button class="card-btn btn btn-danger"> View </button>
+                          </figcaption>
+                         </div>
+                        <div class="card-body">
+                          <h5 class="card-title">${item.title||item.name||''}</h5>
+                          ${(item.reasons||[]).slice(0,2).map(r=>`<div style='font-size:12px;color:#666'>${r}</div>`).join('')}
+                        </div>`;
+
+                      // Attempt to load poster URL in background; if it loads, swap it in, else keep placeholder
+                      if(poster){
+                        const testImg = new Image();
+                        testImg.onload = function(){
+                          const imgElem = card.querySelector('img.card-img-top');
+                          if(imgElem) imgElem.src = poster;
+                        };
+                        testImg.onerror = function(){ /* keep placeholder */ };
+                        testImg.src = poster;
+                      }
+                      cont.appendChild(card);
+                    });
+                  }).catch(err=>{
+                    console.error(err);
+                  });
+              });
+            </script>
+        {% else %}
+            <center><h1> Movie Recommendation System</h1></center>
+        {% endif %}
+        
+        <div class="search-area">
+          <input type="text" name="movie" class="movie form-control" id="autoComplete" autocomplete="off" placeholder="Search for a movie..." required="required" />
+          <button id="enterBtn" class="btn movie-button" disabled="true">Enter</button>
+        </div>
+    </div>
+
+  <div id="loader" class="text-center">
+  </div>
+  
+  <div class="fail">
+    <center><h3>Sorry! The movie you requested is not in our database. 
+    Please check the spelling or try with other movies!</h3></center>
+  </div>
+
+	<div class="results">
+    <center>
+      <h2 id="name" class="text-uppercase"></h2>
+    </center>
+	</div>
+		
+
+    <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='autocomplete.js')}}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='recommend.js')}}"></script>
+
+    <script>
+      // Enable Enter button only when input has text
+      document.addEventListener('DOMContentLoaded', function(){
+        const ac = document.getElementById('autoComplete');
+        const btn = document.getElementById('enterBtn');
+        if(ac && btn){
+          ac.addEventListener('input', function(){ btn.disabled = !this.value.trim(); });
+        }
+      });
+    </script>
+
+</body>
+</html>

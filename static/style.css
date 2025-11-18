@@ -1,0 +1,443 @@
+.movie {
+	color: #181818;
+	margin-left: auto;
+	margin-right: auto;
+	resize: none;
+}
+
+.movie-content {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content:space-around;
+}
+
+.movie-content > div {
+    margin:20px;
+}
+
+.modern-recs {
+	background: rgba(255,255,255,0.02);
+	border-radius: 18px;
+	box-shadow: 0 2px 24px 0 rgba(0,0,0,0.06);
+	padding: 24px 0 12px 0;
+	margin-bottom: 32px;
+}
+
+.modern-card {
+	border-radius: 18px !important;
+	overflow: hidden;
+	border: none;
+	transition: box-shadow 0.3s, transform 0.3s;
+	background: #ffffff;
+	color: #181818;
+}
+.modern-card .card-body {
+	background: #ffffff;
+	border-top: 1px solid #eee;
+	padding: 1rem 1rem 0.5rem 1rem;
+}
+.modern-card .card-title {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #e50914;
+	margin-bottom: 0.5rem;
+}
+.modern-card:hover {
+	box-shadow: 0 8px 32px 0 rgba(229,9,20,0.25), 0 1.5px 8px 0 rgba(0,0,0,0.18);
+	transform: translateY(-4px) scale(1.03);
+	cursor: pointer;
+}
+.modern-card img.card-img-top {
+	border-radius: 0;
+	object-fit: cover;
+	background: #f4f4f4;
+}
+.btn-block{
+	width: 15%;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+	color: #e4e0e0;
+}
+
+#content {
+	background-color: #ffffff;
+	color: #181818;
+	font-family: 'Noto Sans JP', sans-serif;
+}
+
+#details {
+	margin-left: 50px;
+}
+
+.footer {
+	color: #e4e0e0;
+	text-align:right;
+	position: fixed;
+ 	bottom: 20px;
+ 	right: 20px;
+ 	width: 100%;
+}
+
+h1 {
+    font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #e50914;
+    font-weight: bold;
+    margin-top: 30px;
+    text-shadow: #000000 0px 0px 13px;
+ }
+
+.github-corner:hover .octo-arm {
+  	animation: octocat-wave 560ms ease-in-out;
+}
+
+@keyframes octocat-wave {
+  0%,
+  100% {
+    transform: rotate(0)
+  }
+
+  20%,
+  60% {
+    transform: rotate(-25deg)
+  }
+
+  40%,
+  80% {
+    transform: rotate(10deg)
+  }
+}
+
+#autoComplete {
+	background-position: 98%;
+}
+
+/* Search area layout */
+.search-area {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 20px auto;
+	width: 100%;
+	max-width: 1000px;
+	position: relative; /* anchor for absolute dropdown */
+	padding: 6px 12px;
+}
+
+.search-area .movie {
+	width: 70%;
+	max-width: 900px;
+}
+
+.movie {
+	width: 70%;
+	max-width: 900px;
+}
+
+.movie-button {
+	min-width: 120px;
+	width: auto;
+	background-color: #e50914;
+	border-color: #e50914;
+	color: #fff;
+	margin-left: 6px;
+}
+
+/* Tweak input visual to avoid heavy shadows and very large rounded background */
+.movie.form-control {
+	box-shadow: none !important;
+	border-radius: 28px;
+	padding: 14px 18px;
+	font-size: 1rem;
+	border: 1px solid #eee;
+}
+
+/* Styles for autoComplete.js result list */
+.autoComplete_result {
+	position: absolute;
+	z-index: 2500;
+	left: 0; /* align with left of input */
+	width: calc(100% - 140px); /* leave space for Enter button */
+	box-sizing: border-box;
+	top: calc(100% + 8px);
+	background: #ffffff;
+	border: 1px solid #e6e6e6;
+	border-radius: 8px;
+	box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+	list-style: none;
+	padding: 6px 0;
+	margin: 0;
+	overflow: hidden;
+	max-height: 320px;
+	overflow-y: auto;
+	display: block !important;
+}
+.autoComplete_result li {
+	padding: 10px 14px;
+	cursor: pointer;
+	color: #181818;
+	font-size: 0.95rem;
+}
+.autoComplete_result li:hover,
+.autoComplete_result li.active {
+	background: #f5f5f5;
+}
+.autoComplete_result .no_result {
+	color: #888;
+	padding: 8px 14px;
+}
+
+/* Improve contrast for small text that was light on white background */
+.footer {
+	color: #666 !important;
+}
+.fail {
+	color: #333 !important;
+}
+.results #name {
+	color: #333 !important;
+}
+.modern-card .card-body, .modern-card .card-title {
+	color: #181818 !important;
+}
+.movie-content, .movie-content p, .movie-content div {
+	color: #333 !important;
+}
+
+#name {
+	color: #181818;
+	padding: 1px;
+}
+
+h6 {
+    margin-bottom: 20px;  
+}
+
+@media only screen and (max-width: 650px) {
+    #mcontent {
+      display: block;
+    }
+    .poster-lg {
+      display: none;
+    }
+    #details {
+		margin-left: 30px;
+	}
+    #loader {
+		display: none;
+		position: fixed;
+		z-index: 100;
+		left: 0;
+		top:0;
+		width: 100%;
+		height: 100%;
+		background-image: url("../static/loader.gif");
+		background-size: 40%;
+		background-position: 50% 50%;
+		background-color: rgba(255, 255, 255, 1);
+		background-repeat: no-repeat;
+		-webkit-transition: background-image 0.2s ease-in-out;
+		transition: background-image 0.2s ease-in-out;
+	}
+
+	#loader-text {
+		vertical-align: middle;
+		color:white;
+	}
+
+		#autoComplete {
+			background-position: 97% ;
+		}
+
+		/* Mobile: make dropdown full width (stack under button) */
+		.autoComplete_result {
+				left: 0 !important;
+				right: 0 !important;
+				top: calc(100% + 8px);
+		}
+	
+	svg[data-toggle=tooltip] {
+		width: 50px;
+		height: 50px;
+	}
+}
+
+@media only screen and (max-width: 991px) {
+	.modal-body{
+		display: block;
+	}
+	.profile-pic {
+		margin-left: auto;
+		margin-right: auto;
+		display: block;
+		margin-bottom: 20px;
+	}
+}
+@media only screen and (min-width: 992px) {
+	.modal-body {
+		display: flex;
+	}
+}
+
+@media only screen and (min-width: 651px) {
+  .poster-sm {
+    display: none;
+   }
+
+	#mcontent {
+		display: flex;
+		flex-wrap: nowrap;
+	}
+
+	#loader {
+		display: none;
+		position: fixed;
+		z-index: 100;
+		left: 0;
+		top:0;
+		width: 100%;
+		height: 100%;
+		background-image: url("../static/loader.gif");
+		background-size: 20%;
+		background-position: 50% 50%;
+		background-color: rgba(255, 255, 255, 1);
+		background-repeat: no-repeat;
+		-webkit-transition: background-image 0.2s ease-in-out;
+		transition: background-image 0.2s ease-in-out;
+	}
+
+	#loader-text {
+		vertical-align: middle;
+		color:white;
+	}
+
+}
+
+.poster{
+    -webkit-box-shadow: 0px 1px 15px 4px rgba(250,250,250,1);
+    -moz-box-shadow: 0px 1px 15px 4px rgba(250,250,250,1);
+    box-shadow: 0px 1px 15px 4px rgba(250,250,250,1);
+}
+
+.card:hover {
+	cursor: pointer;
+}
+
+.castcard:hover {
+    cursor: pointer;
+}
+
+.cast-img {
+	filter: brightness(100%);
+	-moz-transition: all 0.75s ease;
+    -webkit-transition: all 0.75s ease;
+	transition: all 0.75s ease;
+}
+
+
+.cast-img:hover {
+	filter: brightness(50%);
+	-moz-transition: all 0.75s ease;
+    -webkit-transition: all 0.75s ease;
+    transition: all 0.75s ease;
+}
+
+.fig {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	backdrop-filter: brightness(50%);
+	position: absolute;
+	bottom: 0px;
+	top: 0px;
+	right: 0px;
+	left: 0px;
+	opacity: 0;
+	-moz-transition: all 0.75s ease;
+    -webkit-transition: all 0.75s ease;
+    transition: all 0.75s ease;
+}
+
+.fig:hover {
+	opacity: 1;
+	backdrop-filter:br;
+	-moz-transition: all 0.75s ease;
+    -webkit-transition: all 0.75s ease;
+    transition: all 0.75s ease;
+}
+
+.card-btn {
+	border-radius: 20px;
+}
+
+.imghvr {
+	position: relative;
+}
+
+.table td {
+    border-color: white;
+    border-style:solid; 
+    border-width:1px;
+}
+
+.fail {
+	display: none;
+	color: #333 !important;
+}
+
+/* Override inline white text used in templates so content is visible
+   on the site's white background. Use !important to beat inline styles. */
+#details h6 {
+	color: #181818 !important;
+}
+.results #name, .results h2 {
+	color: #181818 !important;
+}
+.movie .card-title, .modern-card .card-body h5, .movie-content .card-body {
+	color: #181818 !important;
+}
+.modal-body p, .modal-body div {
+	color: #222 !important;
+}
+
+/* Make autocomplete results more robust in layout */
+.autoComplete_result {
+	left: 0 !important;
+	width: calc(100% - 140px);
+}
+
+/* Ensure dropdown sits above other elements (modals/cards) */
+.autoComplete_result {
+	z-index: 3000 !important;
+}
+
+/* Ensure most content areas that used inline white text become visible */
+.results *,
+#details *,
+.movie-content *,
+.user-actions * {
+	color: #181818 !important;
+}
+
+/* Strong override to ensure autocomplete dropdown is clearly visible
+   on all screens, even if earlier rules used absolute positioning. */
+.autoComplete_result {
+	position: static !important;
+	display: block !important;
+	background: #ffffff;
+	border: 1px solid #ffffff;
+	border-radius: 8px;
+	margin: 8px auto 0;
+	max-width: 720px;
+	list-style: none;
+	padding: 4px 0;
+	z-index: 4000 !important;
+}
+.autoComplete_result li {
+	padding: 10px 16px;
+	cursor: pointer;
+}
+.autoComplete_result li:hover,
+.autoComplete_result li.active {
+	background: #ffecec;
+}
